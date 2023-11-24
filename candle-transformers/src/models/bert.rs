@@ -12,6 +12,7 @@ enum HiddenAct {
     Relu,
 }
 
+#[derive(Debug, Clone)]
 struct HiddenActLayer {
     act: HiddenAct,
     span: tracing::Span,
@@ -115,6 +116,7 @@ fn embedding(vocab_size: usize, hidden_size: usize, vb: VarBuilder) -> Result<Em
     Ok(Embedding::new(embeddings, hidden_size))
 }
 
+#[derive(Debug, Clone)]
 struct Dropout {
     #[allow(dead_code)]
     pr: f64,
@@ -133,7 +135,9 @@ impl Module for Dropout {
     }
 }
 
+
 // https://github.com/huggingface/transformers/blob/6eedfa6dd15dc1e22a55ae036f681914e5a0d9a1/src/transformers/models/bert/modeling_bert.py#L180
+#[derive(Debug, Clone)]
 struct BertEmbeddings {
     word_embeddings: Embedding,
     position_embeddings: Option<Embedding>,
@@ -193,6 +197,7 @@ impl BertEmbeddings {
     }
 }
 
+#[derive(Debug, Clone)]
 struct BertSelfAttention {
     query: Linear,
     key: Linear,
@@ -261,6 +266,7 @@ impl Module for BertSelfAttention {
     }
 }
 
+#[derive(Debug, Clone)]
 struct BertSelfOutput {
     dense: Linear,
     layer_norm: LayerNorm,
@@ -294,6 +300,7 @@ impl BertSelfOutput {
 }
 
 // https://github.com/huggingface/transformers/blob/6eedfa6dd15dc1e22a55ae036f681914e5a0d9a1/src/transformers/models/bert/modeling_bert.py#L392
+#[derive(Debug, Clone)]
 struct BertAttention {
     self_attention: BertSelfAttention,
     self_output: BertSelfOutput,
@@ -322,6 +329,7 @@ impl Module for BertAttention {
 }
 
 // https://github.com/huggingface/transformers/blob/6eedfa6dd15dc1e22a55ae036f681914e5a0d9a1/src/transformers/models/bert/modeling_bert.py#L441
+#[derive(Debug, Clone)]
 struct BertIntermediate {
     dense: Linear,
     intermediate_act: HiddenActLayer,
@@ -349,6 +357,7 @@ impl Module for BertIntermediate {
 }
 
 // https://github.com/huggingface/transformers/blob/6eedfa6dd15dc1e22a55ae036f681914e5a0d9a1/src/transformers/models/bert/modeling_bert.py#L456
+#[derive(Debug, Clone)]
 struct BertOutput {
     dense: Linear,
     layer_norm: LayerNorm,
@@ -382,6 +391,7 @@ impl BertOutput {
 }
 
 // https://github.com/huggingface/transformers/blob/6eedfa6dd15dc1e22a55ae036f681914e5a0d9a1/src/transformers/models/bert/modeling_bert.py#L470
+#[derive(Debug, Clone)]
 struct BertLayer {
     attention: BertAttention,
     intermediate: BertIntermediate,
@@ -419,6 +429,7 @@ impl Module for BertLayer {
 }
 
 // https://github.com/huggingface/transformers/blob/6eedfa6dd15dc1e22a55ae036f681914e5a0d9a1/src/transformers/models/bert/modeling_bert.py#L556
+#[derive(Debug, Clone)]
 struct BertEncoder {
     layers: Vec<BertLayer>,
     span: tracing::Span,
@@ -447,6 +458,7 @@ impl Module for BertEncoder {
 }
 
 // https://github.com/huggingface/transformers/blob/6eedfa6dd15dc1e22a55ae036f681914e5a0d9a1/src/transformers/models/bert/modeling_bert.py#L874
+#[derive(Debug, Clone)]
 pub struct BertModel {
     embeddings: BertEmbeddings,
     encoder: BertEncoder,
